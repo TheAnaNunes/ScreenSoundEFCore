@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ScreenSoundSQL.Modelos;
 
 namespace ScreenSoundSQL.Banco;
 
@@ -28,4 +29,6 @@ internal class DAL<T> (DbContext context) where T : class
         context
             .Set<T>()
             .FirstOrDefault(condicao);
+    
+    public IEnumerable<T> ListarPor(Func<T, bool> condicao) => [.. Context.Set<T>().Where(condicao)];
 }

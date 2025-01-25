@@ -1,14 +1,13 @@
 ﻿namespace ScreenSoundSQL.Modelos;
 
-internal class Musica(string nome)
+public class Musica(string nome)
 {
     public string Nome { get; set; } = nome;
     public int Id { get; set; }
+    public int? AnoLancamento { get; set; }
+    public virtual Artista? Artista { get; }
 
-    public void ExibirFichaTecnica()
-    {
-        Console.WriteLine($"Nome: {Nome}");
-    }
+    public void ExibirFichaTecnica() => Console.WriteLine($"Nome: {Nome} - Ano Lançamento: {AnoLancamento}");
 
     public override string ToString() => 
         @$"Id: {Id}
