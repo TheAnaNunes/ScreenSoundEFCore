@@ -5,7 +5,7 @@ namespace ScreenSoundSQL.Menus;
 
 internal class MenuRegistrarArtista : Menu
 {
-    public override void Executar(ArtistaDAL artistaDal)
+    public override void Executar(DAL<Artista> artistaDal)
     {
         base.Executar(artistaDal);
         ExibirTituloDaOpcao("Registro dos Artistas");

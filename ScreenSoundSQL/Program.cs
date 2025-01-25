@@ -6,6 +6,8 @@ var context = new ScreenSoundContext();
 var musicaDal = new DAL<Musica>(context);
 var artistaDal = new DAL<Artista>(context);
 
+musicaDal.Adicionar(new Musica("God Is a Woman"));
+
 return;
 
 Dictionary<int, Menu> opcoes = new()
