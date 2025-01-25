@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ScreenSoundSQL.Modelos;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Expressions;
 
 namespace ScreenSoundSQL.Banco;
 
@@ -31,4 +32,9 @@ internal class DAL<T> (DbContext context) where T : class
             .FirstOrDefault(condicao);
     
     public IEnumerable<T> ListarPor(Func<T, bool> condicao) => [.. Context.Set<T>().Where(condicao)];
+
+    public void AtualizarCondicao(Func<T, bool> condicao, Expression<Func<SetPropertyCalls<T>, SetPropertyCalls<T>>> update)
+    {
+        Context.Set<T>().Where(condicao).AsQueryable().ExecuteUpdateAsync(update);
+    }
 }
