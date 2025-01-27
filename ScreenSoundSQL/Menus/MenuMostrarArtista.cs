@@ -3,7 +3,7 @@ using ScreenSoundSQL.Modelos;
 
 namespace ScreenSoundSQL.Menus;
 
-internal class MenuMostrarArtistas : Menu
+public class MenuMostrarArtistas : Menu
 {
     public override void Executar(DAL<Artista> artistaDal)
     {

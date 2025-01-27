@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace ScreenSoundSQL.Banco;
 
-internal class DAL<T> (DbContext context) where T : class
+public class DAL<T> (DbContext context) where T : class
 {
     private readonly DbContext context = context;
     protected DbContext Context => context;

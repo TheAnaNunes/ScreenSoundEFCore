@@ -3,7 +3,7 @@ using ScreenSoundSQL.Modelos;
 
 namespace ScreenSoundSQL.Menus;
 
-internal class Menu
+public class Menu
 {
     public void ExibirTituloDaOpcao(string titulo)
     {

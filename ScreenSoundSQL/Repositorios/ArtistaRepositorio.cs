@@ -5,7 +5,7 @@ using ScreenSoundSQL.Repositorios.Interfaces;
 
 namespace ScreenSoundSQL.Repositorios;
 
-internal class ArtistaRepositorio(ScreenSoundContext contexto) : IArtistaRepositorio
+public class ArtistaRepositorio(ScreenSoundContext contexto) : IArtistaRepositorio
 {
     private ScreenSoundContext _contexto = contexto;
     public async Task AdicionarAsync(Artista artista)
