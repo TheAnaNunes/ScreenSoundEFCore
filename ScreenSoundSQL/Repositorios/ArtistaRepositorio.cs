@@ -28,8 +28,11 @@ internal class ArtistaRepositorio(ScreenSoundContext contexto) : IArtistaReposit
         await _contexto.Artistas.ToListAsync();
 
     public async Task<Artista?> ConsultarPorIdAsync(int id) =>
-        await _contexto.Artistas.FirstOrDefaultAsync(artista => artista.Id == id);
+        await _contexto.Artistas
+        .FirstOrDefaultAsync(artista => artista.Id == id);
 
     public async Task DeletarPorIdAsync(int id) =>
-        await _contexto.Artistas.Where(artista => artista.Id == id).ExecuteDeleteAsync();
+        await _contexto.Artistas
+        .Where(artista => artista.Id == id)
+        .ExecuteDeleteAsync();
 }
