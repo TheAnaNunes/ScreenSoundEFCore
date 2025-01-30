@@ -1,8 +1,22 @@
 ﻿namespace ScreenSoundSQL.Modelos;
 
-public class Musica(string nome)
+public class Musica
 {
-    public string Nome { get; set; } = nome;
+    public Musica(string nome, int id, int? anoLancamento, Artista? artista)
+    {
+        Nome = nome;
+        Id = id;
+        AnoLancamento = anoLancamento;
+        Artista = artista;
+    }
+
+    public Musica(string nome)
+    {
+        Nome = nome;
+    }
+    public Musica() { }
+
+    public string Nome { get; set; } = string.Empty;
     public int Id { get; set; }
     public int? AnoLancamento { get; set; }
     public virtual Artista? Artista { get; }

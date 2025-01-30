@@ -1,4 +1,5 @@
-﻿using ScreenSoundSQL.Banco;
+﻿using Microsoft.EntityFrameworkCore;
+using ScreenSoundSQL.Banco;
 using ScreenSoundSQL.Modelos;
 
 namespace ScreenSoundSQL.Menus;
@@ -11,7 +12,7 @@ internal class MenuMostrarMusicasPorAno : Menu
         ExibirTituloDaOpcao("Exibir Músicas por Ano");
         Console.Write("Digite o ano de lançamento da(s) música(s): ");
         int anoLancamentoMusica = int.Parse(Console.ReadLine()!);
-        var musicaDal = new DAL<Musica>(new ScreenSoundContext());
+        var musicaDal = new DAL<Musica>(new ScreenSoundContext(new DbContextOptions<ScreenSoundContext>()));
         var listaMusicas = musicaDal.ListarPor(musica => musica.AnoLancamento.Equals(anoLancamentoMusica));
         if (listaMusicas.Any())
         {

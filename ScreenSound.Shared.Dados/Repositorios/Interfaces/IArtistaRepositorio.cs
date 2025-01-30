@@ -2,11 +2,12 @@
 
 namespace ScreenSoundSQL.Repositorios.Interfaces;
 
-internal interface IArtistaRepositorio
+public interface IArtistaRepositorio
 {
     Task AdicionarAsync(Artista artista);
     Task DeletarPorIdAsync(int id);
     Task<Artista?> ConsultarPorIdAsync(int id);
     Task<List<Artista>> ConsultarAsync();
     Task AtualizarPorIdAsync(int id, ArtistaAtualizacaoModel model);
+    Task<Artista?> ConsultarPorNomeAsync(string nome);
 }

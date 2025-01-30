@@ -1,8 +1,25 @@
-﻿using ScreenSoundSQL.Banco;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using ScreenSoundSQL.Banco;
 using ScreenSoundSQL.Menus;
 using ScreenSoundSQL.Modelos;
 
-var context = new ScreenSoundContext();
+var host = Host.CreateDefaultBuilder(args)
+    .ConfigureServices((contexto, servicos) => 
+    {
+        servicos.AddDbContext<ScreenSoundContext>(options =>
+        {
+            options.UseSqlServer("Data Source=DESKTOP-NV3P7TJ;Initial Catalog=ScreenSoundV0;Integrated Security=True;Encrypt=False;");
+        });
+    })
+    .Build();
+
+
+var scope = host.Services.CreateScope();
+
+var context = scope.ServiceProvider.GetRequiredService<ScreenSoundContext>();
+
 var musicaDal = new DAL<Musica>(context);
 var artistaDal = new DAL<Artista>(context);
 

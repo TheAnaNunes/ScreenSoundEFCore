@@ -14,6 +14,9 @@ public class ArtistaRepositorio(ScreenSoundContext contexto) : IArtistaRepositor
         await _contexto.SaveChangesAsync();
     }
 
+    public async Task<Artista?> ConsultarPorNomeAsync(string nome) =>
+        await _contexto.Artistas.FirstOrDefaultAsync(a => a.Nome!.ToUpper().Equals(nome.ToUpper()));
+
     public async Task AtualizarPorIdAsync(int id, ArtistaAtualizacaoModel model)
     {
         await _contexto.Artistas

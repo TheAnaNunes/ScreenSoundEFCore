@@ -2,7 +2,7 @@
 using ScreenSoundSQL.Modelos;
 
 namespace ScreenSoundSQL.Banco;
-public class ScreenSoundContext : DbContext
+public class ScreenSoundContext(DbContextOptions<ScreenSoundContext> options) : DbContext(options)
 {
     public DbSet<Artista> Artistas { get; set; }
     public DbSet<Musica> Musicas { get; set; }
