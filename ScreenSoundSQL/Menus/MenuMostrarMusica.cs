@@ -1,17 +1,16 @@
-﻿using ScreenSoundSQL.Banco;
-using ScreenSoundSQL.Modelos;
+﻿using ScreenSoundSQL.Repositorios.Interfaces;
 
 namespace ScreenSoundSQL.Menus;
 
 internal class MenuMostrarMusicas : Menu
 {
-    public override void Executar(DAL<Artista> artistaDal)
+    public override async Task ExecutarAsync(IArtistaRepositorio artistas, IMusicaRepositorio musicas)
     {
-        base.Executar(artistaDal);
+        Console.Clear();
         ExibirTituloDaOpcao("Exibir detalhes do artista");
         Console.Write("Digite o nome do artista que deseja conhecer melhor: ");
         string nomeDoArtista = Console.ReadLine()!;
-        var artistaRecuperado = artistaDal.RecuperarPor(artista => artista.Nome.Equals(nomeDoArtista));
+        var artistaRecuperado = await artistas.ConsultarPorNomeAsync(nomeDoArtista);
         if (artistaRecuperado is not null)
         {
             Console.WriteLine("\nDiscografia:");

@@ -1,27 +1,36 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using ScreenSound.Shared.Dados.Repositorios;
 using ScreenSoundSQL.Banco;
 using ScreenSoundSQL.Menus;
-using ScreenSoundSQL.Modelos;
+using ScreenSoundSQL.Repositorios;
+using ScreenSoundSQL.Repositorios.Interfaces;
 
 var host = Host.CreateDefaultBuilder(args)
+    .ConfigureLogging( logging =>
+        {
+            logging.ClearProviders();
+            logging.AddConsole();
+            logging.SetMinimumLevel(LogLevel.Warning);
+        })
     .ConfigureServices((contexto, servicos) => 
     {
         servicos.AddDbContext<ScreenSoundContext>(options =>
         {
-            options.UseSqlServer("Data Source=DESKTOP-NV3P7TJ;Initial Catalog=ScreenSoundV0;Integrated Security=True;Encrypt=False;");
+            options.UseSqlServer("Data Source=DESKTOP-NV3P7TJ;Initial Catalog=ScreenSoundV0;Integrated Security=True;Encrypt=False;")
+                .LogTo(Console.WriteLine, LogLevel.Warning);
         });
+        servicos.AddScoped<IArtistaRepositorio, ArtistaRepositorio>();
+        servicos.AddScoped<IMusicaRepositorio, MusicaRepositorio>();
     })
     .Build();
 
 
 var scope = host.Services.CreateScope();
-
-var context = scope.ServiceProvider.GetRequiredService<ScreenSoundContext>();
-
-var musicaDal = new DAL<Musica>(context);
-var artistaDal = new DAL<Artista>(context);
+var musicas = scope.ServiceProvider.GetRequiredService<IMusicaRepositorio>();
+var artistas = scope.ServiceProvider.GetRequiredService<IArtistaRepositorio>();
 
 Dictionary<int, Menu> opcoes = new()
 {
@@ -47,7 +56,7 @@ void ExibirLogo()
     Console.WriteLine("Boas vindas ao Screen Sound 3.0!");
 }
 
-void ExibirOpcoesDoMenu()
+async Task ExibirOpcoesDoMenu()
 {
     ExibirLogo();
     Console.WriteLine("\nDigite 1 para registrar um artista");
@@ -64,8 +73,8 @@ void ExibirOpcoesDoMenu()
     if (opcoes.ContainsKey(opcaoEscolhidaNumerica))
     {
         Menu menuASerExibido = opcoes[opcaoEscolhidaNumerica];
-        menuASerExibido.Executar(artistaDal);
-        if (opcaoEscolhidaNumerica > 0) ExibirOpcoesDoMenu();
+        await menuASerExibido.ExecutarAsync(artistas, musicas);
+        if (opcaoEscolhidaNumerica > 0) await ExibirOpcoesDoMenu();
     }
     else
     {
@@ -73,4 +82,4 @@ void ExibirOpcoesDoMenu()
     }
 }
 
-ExibirOpcoesDoMenu();
+await ExibirOpcoesDoMenu();

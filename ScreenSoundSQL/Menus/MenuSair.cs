@@ -1,12 +1,12 @@
-﻿using ScreenSoundSQL.Banco;
-using ScreenSoundSQL.Modelos;
+﻿using ScreenSoundSQL.Repositorios.Interfaces;
 
 namespace ScreenSoundSQL.Menus;
 
 internal class MenuSair : Menu
 {
-    public override void Executar(DAL<Artista> artistaDal)
+    public override async Task ExecutarAsync(IArtistaRepositorio artistas, IMusicaRepositorio musicas)
     {
+        await Task.Delay(1);
         Console.WriteLine("Tchau tchau :)");
     }
 }

@@ -2,10 +2,9 @@
 
 public class Musica
 {
-    public Musica(string nome, int id, int? anoLancamento, Artista? artista)
+    public Musica(string nome, int? anoLancamento, Artista? artista)
     {
         Nome = nome;
-        Id = id;
         AnoLancamento = anoLancamento;
         Artista = artista;
     }

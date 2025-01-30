@@ -8,6 +8,7 @@ public interface IArtistaRepositorio
     Task DeletarPorIdAsync(int id);
     Task<Artista?> ConsultarPorIdAsync(int id);
     Task<List<Artista>> ConsultarAsync();
+    Task AdicionarMusicaArtistaAsync(Artista artista);
     Task AtualizarPorIdAsync(int id, ArtistaAtualizacaoModel model);
     Task<Artista?> ConsultarPorNomeAsync(string nome);
 }

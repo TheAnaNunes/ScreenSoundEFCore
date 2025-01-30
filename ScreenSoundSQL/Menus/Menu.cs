@@ -1,9 +1,8 @@
-﻿using ScreenSoundSQL.Banco;
-using ScreenSoundSQL.Modelos;
+﻿using ScreenSoundSQL.Repositorios.Interfaces;
 
 namespace ScreenSoundSQL.Menus;
 
-public class Menu
+public abstract class Menu
 {
     public void ExibirTituloDaOpcao(string titulo)
     {
@@ -13,8 +12,5 @@ public class Menu
         Console.WriteLine(titulo);
         Console.WriteLine(asteriscos + "\n");
     }
-    public virtual void Executar(DAL<Artista> artistaDal)
-    {
-        Console.Clear();
-    }
+    public abstract Task ExecutarAsync(IArtistaRepositorio artistas, IMusicaRepositorio musicas);
 }

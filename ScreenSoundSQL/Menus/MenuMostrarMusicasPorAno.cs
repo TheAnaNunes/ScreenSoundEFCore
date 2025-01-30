@@ -1,19 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ScreenSoundSQL.Banco;
-using ScreenSoundSQL.Modelos;
+﻿using ScreenSoundSQL.Repositorios.Interfaces;
 
 namespace ScreenSoundSQL.Menus;
 
 internal class MenuMostrarMusicasPorAno : Menu
 {
-    public override void Executar(DAL<Artista> artistaDal)
+    public override async Task ExecutarAsync(IArtistaRepositorio artistas, IMusicaRepositorio musicas)
     {
-        base.Executar(artistaDal);
+        Console.Clear();
         ExibirTituloDaOpcao("Exibir Músicas por Ano");
         Console.Write("Digite o ano de lançamento da(s) música(s): ");
         int anoLancamentoMusica = int.Parse(Console.ReadLine()!);
-        var musicaDal = new DAL<Musica>(new ScreenSoundContext(new DbContextOptions<ScreenSoundContext>()));
-        var listaMusicas = musicaDal.ListarPor(musica => musica.AnoLancamento.Equals(anoLancamentoMusica));
+        var listaMusicas = await musicas.ConsultarPorAnoLancamentoAsync(anoLancamentoMusica);
         if (listaMusicas.Any())
         {
             foreach (var musica in listaMusicas)

@@ -38,4 +38,11 @@ public class ArtistaRepositorio(ScreenSoundContext contexto) : IArtistaRepositor
         await _contexto.Artistas
         .Where(artista => artista.Id == id)
         .ExecuteDeleteAsync();
+
+    public async Task AdicionarMusicaArtistaAsync(Artista artista)
+    {
+        await _contexto.Artistas
+            .Include(a => a.Musicas)
+            .FirstOrDefaultAsync(a => a.Nome!.ToUpper().Equals(artista.Nome!.ToUpper()));
+    }
 }

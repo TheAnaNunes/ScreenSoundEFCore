@@ -4,9 +4,10 @@ namespace ScreenSoundSQL.Repositorios.Interfaces;
 
 public interface IMusicaRepositorio
 {
-    Task AdicionarAsync(Musica artista);
+    Task AdicionarAsync(Artista artista, Musica musica);
     Task DeletarPorIdAsync(int id);
     Task<Musica?> ConsultarPorIdAsync(int id);
+    Task<List<Musica>> ConsultarPorAnoLancamentoAsync(int anoLancamento);
     Task<List<Musica>> ConsultarAsync();
     Task<Musica?> ConsultarPorNomeAsync(string nome);
 }
