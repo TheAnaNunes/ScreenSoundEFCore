@@ -13,14 +13,14 @@ var host = Host.CreateDefaultBuilder(args)
         {
             logging.ClearProviders();
             logging.AddConsole();
-            logging.SetMinimumLevel(LogLevel.Warning);
+            logging.SetMinimumLevel(LogLevel.Error);
         })
     .ConfigureServices((contexto, servicos) => 
     {
         servicos.AddDbContext<ScreenSoundContext>(options =>
         {
             options.UseSqlServer("Data Source=DESKTOP-NV3P7TJ;Initial Catalog=ScreenSoundV0;Integrated Security=True;Encrypt=False;")
-                .LogTo(Console.WriteLine, LogLevel.Warning);
+                .LogTo(Console.WriteLine, LogLevel.Error);
         });
         servicos.AddScoped<IArtistaRepositorio, ArtistaRepositorio>();
         servicos.AddScoped<IMusicaRepositorio, MusicaRepositorio>();
@@ -74,6 +74,7 @@ async Task ExibirOpcoesDoMenu()
     {
         Menu menuASerExibido = opcoes[opcaoEscolhidaNumerica];
         await menuASerExibido.ExecutarAsync(artistas, musicas);
+
         if (opcaoEscolhidaNumerica > 0) await ExibirOpcoesDoMenu();
     }
     else

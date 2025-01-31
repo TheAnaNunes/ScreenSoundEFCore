@@ -8,14 +8,8 @@ namespace ScreenSound.Shared.Dados.Repositorios;
 public class MusicaRepositorio(ScreenSoundContext context) : IMusicaRepositorio
 {
     private ScreenSoundContext _context { get; set; } = context;
-    public async Task AdicionarAsync(Artista artista, Musica musica)
+    public async Task AdicionarAsync(Musica musica)
     {
-        var id = await _context.Artistas
-                    .Where(a => a.Nome!.ToUpper().Equals(artista.Nome!.ToUpper()))
-                    .Select(a => a.Id)
-                    .FirstOrDefaultAsync();
-
-        musica.Artista!.Id = id;
         await _context.Musicas.AddAsync(musica);
         await _context.SaveChangesAsync();
     }
