@@ -1,4 +1,5 @@
-﻿using ScreenSoundSQL.Modelos;
+﻿using ScreenSound.Shared.Modelos.Modelos;
+using ScreenSoundSQL.Modelos;
 
 namespace ScreenSoundSQL.Repositorios.Interfaces;
 

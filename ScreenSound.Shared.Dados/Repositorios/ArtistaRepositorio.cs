@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ScreenSound.Shared.Modelos.Modelos;
 using ScreenSoundSQL.Banco;
 using ScreenSoundSQL.Modelos;
 using ScreenSoundSQL.Repositorios.Interfaces;
@@ -15,7 +16,8 @@ public class ArtistaRepositorio(ScreenSoundContext contexto) : IArtistaRepositor
     }
 
     public async Task<Artista?> ConsultarPorNomeAsync(string nome) =>
-        await _contexto.Artistas.FirstOrDefaultAsync(a => a.Nome!.ToUpper().Equals(nome.ToUpper()));
+        await _contexto.Artistas
+            .FirstOrDefaultAsync(a => a.Nome!.ToUpper().Equals(nome.ToUpper()));
 
     public async Task AtualizarPorIdAsync(int id, ArtistaAtualizacaoModel model)
     {
@@ -34,10 +36,15 @@ public class ArtistaRepositorio(ScreenSoundContext contexto) : IArtistaRepositor
         await _contexto.Artistas
         .FirstOrDefaultAsync(artista => artista.Id == id);
 
-    public async Task DeletarPorIdAsync(int id) =>
-        await _contexto.Artistas
-        .Where(artista => artista.Id == id)
-        .ExecuteDeleteAsync();
+    public async Task DeletarPorIdAsync(int id)
+    {
+        var artista = await _contexto.Artistas
+            .FirstOrDefaultAsync(artista => artista.Id == id) ?? 
+            throw new ArgumentNullException($"O artista que pertence ao id {id} não foi encontrado.");
+
+        _contexto.Artistas.Remove(artista!);
+        await _contexto.SaveChangesAsync();
+    }
 
     public async Task AdicionarMusicaArtistaAsync(Artista artista)
     {

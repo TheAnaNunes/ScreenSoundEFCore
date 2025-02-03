@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ScreenSound.Shared.Dados.Repositorios;
 using ScreenSoundSQL.Banco;
+using ScreenSoundSQL.Modelos;
 using ScreenSoundSQL.Repositorios;
 using ScreenSoundSQL.Repositorios.Interfaces;
 using System.Text.Json.Serialization;
@@ -25,15 +26,30 @@ var app = builder.Build();
 
 app.MapGet("/Artistas", async ([FromServices] IArtistaRepositorio repositorio) =>
 {
-    return await repositorio.ConsultarAsync();
+    return Results.Ok(await repositorio.ConsultarAsync());
 });
-
+ 
 app.MapGet("/Artistas/{nome}", async (string nome,[FromServices] IArtistaRepositorio repositorio) =>
 {
     var artistaEscolhido = await repositorio.ConsultarPorNomeAsync(nome);
-    if (artistaEscolhido is null)
-        return Results.NotFound(new { Mensagem = "Aritsta não encontrado" });
+    if (artistaEscolhido is null) return Results.NotFound(new { Mensagem = "Aritsta não encontrado" });
     return Results.Ok(artistaEscolhido);
+});
+
+app.MapPost("/Artistas", async ([FromBody] Artista artista, [FromServices] IArtistaRepositorio repositorio) =>
+{
+    await repositorio.AdicionarAsync(artista);
+    return Results.Created($"/Artistas/{artista.Nome}", artista);
+});
+
+app.MapDelete("/Artistas/{id}", async ([FromServices] IArtistaRepositorio repositorioArtista,[FromServices] IMusicaRepositorio repositorioMusica, int id) =>
+{
+    Artista? artista = await repositorioArtista.ConsultarPorIdAsync(id);
+
+    if (artista is null) return Results.NotFound("Artista não encontrado");
+
+    await repositorioArtista.DeletarPorIdAsync(id);
+    return Results.Ok($"Artista: {artista.Nome} removido com sucesso!");
 });
 
 app.Run();

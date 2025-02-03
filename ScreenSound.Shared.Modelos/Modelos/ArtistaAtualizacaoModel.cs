@@ -1,4 +1,4 @@
-﻿namespace ScreenSoundSQL.Modelos;
+﻿namespace ScreenSound.Shared.Modelos.Modelos;
 
 public class ArtistaAtualizacaoModel(string nome, string fotoPerfil, string bio)
 {

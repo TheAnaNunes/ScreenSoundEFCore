@@ -19,6 +19,7 @@ public class Musica
     public int Id { get; set; }
     public int? AnoLancamento { get; set; }
     public virtual Artista? Artista { get; }
+    public int ArtistaId { get; set; }
 
     public void ExibirFichaTecnica() => Console.WriteLine($"Nome: {Nome} - Ano Lançamento: {AnoLancamento}");
 

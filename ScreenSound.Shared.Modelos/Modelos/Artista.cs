@@ -3,7 +3,7 @@
 public class Artista
 {
     public virtual ICollection<Musica> Musicas { get; set; } = [];
-    public string? Nome { get; set; }
+    public string Nome { get; set; } = string.Empty;
     public string FotoPerfil { get; set; } = "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png";
     public string? Bio { get; set; }
     public int Id { get; set; }
