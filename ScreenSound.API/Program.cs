@@ -68,7 +68,7 @@ app.MapDelete("/Artistas/{id}", async ([FromServices] IArtistaRepositorio reposi
     if (artista is null) return Results.NotFound("Artista não encontrado");
 
     await repositorioArtista.DeletarPorIdAsync(id);
-    return Results.Ok($"Artista: {artista.Nome} removido com sucesso!");
+    return Results.Ok();
 });
 
 app.MapDelete("/Musicas/{id}", async ([FromServices] IMusicaRepositorio repositorio, int id) =>
@@ -78,19 +78,19 @@ app.MapDelete("/Musicas/{id}", async ([FromServices] IMusicaRepositorio reposito
     if (musica is null) return Results.NotFound("Musica não encontrada");
 
     await repositorio.DeletarPorIdAsync(id);
-    return Results.Ok($"Musica: {musica.Nome} removida com sucesso!");
+    return Results.Ok();
 });
 
 app.MapPut("/Artistas/{id}", async ([FromServices] IArtistaRepositorio repositorio, int id, [FromBody] ArtistaAtualizacaoModel artista) =>
 {
     await repositorio.AtualizarPorIdAsync(id, artista);
-    return Results.Ok($"Artista {artista.Nome} foi atualizado com sucesso!");
+    return Results.Ok();
 });
 
 app.MapPut("/Musicas/{id}", async ([FromServices] IMusicaRepositorio repositorio, int id, [FromBody] MusicaAtualizacaoModel musica) =>
 {
     await repositorio.AtualizarPorIdAsync(id, musica);
-    return Results.Ok($"Musica {musica.Nome} foi atualizado com sucesso!");
+    return Results.Ok();
 });
 
 app.Run();
