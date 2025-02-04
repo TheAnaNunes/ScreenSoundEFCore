@@ -19,15 +19,13 @@ public class ArtistaRepositorio(ScreenSoundContext contexto) : IArtistaRepositor
         await _contexto.Artistas
             .FirstOrDefaultAsync(a => a.Nome!.ToUpper().Equals(nome.ToUpper()));
 
-    public async Task AtualizarPorIdAsync(int id, ArtistaAtualizacaoModel model)
-    {
+    public async Task AtualizarPorIdAsync(int id, ArtistaAtualizacaoModel model) =>
         await _contexto.Artistas
             .Where(a => a.Id == id)
             .ExecuteUpdateAsync(setter => setter
                 .SetProperty(prop => prop.FotoPerfil,model.FotoPerfil)
                 .SetProperty(prop => prop.Bio, model.Bio)
                 .SetProperty(prop => prop.Nome, model.Nome));
-    }
 
     public async Task<List<Artista>> ConsultarAsync() =>
         await _contexto.Artistas.ToListAsync();

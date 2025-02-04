@@ -1,4 +1,5 @@
-﻿using ScreenSoundSQL.Modelos;
+﻿using ScreenSound.Shared.Modelos.Modelos;
+using ScreenSoundSQL.Modelos;
 
 namespace ScreenSoundSQL.Repositorios.Interfaces;
 
@@ -10,4 +11,5 @@ public interface IMusicaRepositorio
     Task<List<Musica>> ConsultarPorAnoLancamentoAsync(int anoLancamento);
     Task<List<Musica>> ConsultarAsync();
     Task<Musica?> ConsultarPorNomeAsync(string nome);
+    Task AtualizarPorIdAsync(int id, MusicaAtualizacaoModel model);
 }
