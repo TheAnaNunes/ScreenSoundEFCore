@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ScreenSound.Shared.Dados.Repositorios;
+using ScreenSound.Shared.Modelos.Modelos;
 using ScreenSoundSQL.Banco;
 using ScreenSoundSQL.Modelos;
 using ScreenSoundSQL.Repositorios;
@@ -50,6 +51,12 @@ app.MapDelete("/Artistas/{id}", async ([FromServices] IArtistaRepositorio reposi
 
     await repositorioArtista.DeletarPorIdAsync(id);
     return Results.Ok($"Artista: {artista.Nome} removido com sucesso!");
+});
+
+app.MapPut("/Artistas/{id}", async ([FromServices] IArtistaRepositorio repositorio, int id, [FromBody] ArtistaAtualizacaoModel artista) =>
+{
+    await repositorio.AtualizarPorIdAsync(id, artista);
+    return Results.Ok($"Artista {artista.Nome} foi atualizado com sucesso!");
 });
 
 app.Run();
