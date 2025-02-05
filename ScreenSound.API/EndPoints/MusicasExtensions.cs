@@ -78,10 +78,7 @@ public static class MusicasExtensions
             if (generoRetornadoBanco is not null)
                 listaDeGeneros.Add(generoRetornadoBanco!);
             else
-            {
-                await repositorio.AdicionarAsync(generoConvertido);
                 listaDeGeneros.Add(generoConvertido);
-            }
         }
         return listaDeGeneros;
     }
