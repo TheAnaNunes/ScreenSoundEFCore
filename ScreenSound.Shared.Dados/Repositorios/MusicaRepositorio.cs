@@ -25,6 +25,7 @@ public class MusicaRepositorio(ScreenSoundContext context) : IMusicaRepositorio
 
     public async Task<List<Musica>> ConsultarAsync() =>
         await _contexto.Musicas
+            .Include(m => m.Artista)
             .ToListAsync();
 
     public async Task<List<Musica>> ConsultarPorAnoLancamentoAsync(int anoLancamento) =>

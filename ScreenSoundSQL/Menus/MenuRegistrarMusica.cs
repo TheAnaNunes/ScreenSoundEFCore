@@ -22,7 +22,7 @@ internal class MenuRegistrarMusica : Menu
             Console.Write("Agora digite o ano da música: ");
             int anoLancamentoDaMusica = int.Parse(Console.ReadLine()!);
 
-            var musica = new Musica(tituloDaMusica, anoLancamentoDaMusica, artistaRecuperado);
+            var musica = new Musica(tituloDaMusica, anoLancamentoDaMusica, artistaRecuperado.Id);
             artistaRecuperado.AdicionarMusica(musica);
             var artistaComId = await artistas.ConsultarPorNomeAsync(artistaRecuperado.Nome!);
 

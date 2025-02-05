@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScreenSoundSQL.Banco;
 
@@ -10,9 +11,11 @@ using ScreenSoundSQL.Banco;
 namespace ScreenSoundSQL.Migrations
 {
     [DbContext(typeof(ScreenSoundContext))]
-    partial class ScreenSoundContextModelSnapshot : ModelSnapshot
+    [Migration("20250205182059_AdicionandoRelacionamentoMusicaGenero")]
+    partial class AdicionandoRelacionamentoMusicaGenero
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,6 +51,7 @@ namespace ScreenSoundSQL.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Descricao")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nome")
@@ -125,13 +129,11 @@ namespace ScreenSoundSQL.Migrations
 
             modelBuilder.Entity("ScreenSoundSQL.Modelos.Musica", b =>
                 {
-                    b.HasOne("ScreenSoundSQL.Modelos.Artista", "Artista")
+                    b.HasOne("ScreenSoundSQL.Modelos.Artista", null)
                         .WithMany("Musicas")
                         .HasForeignKey("ArtistaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Artista");
                 });
 
             modelBuilder.Entity("ScreenSoundSQL.Modelos.Artista", b =>

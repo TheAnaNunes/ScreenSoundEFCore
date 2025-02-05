@@ -19,7 +19,9 @@ var host = Host.CreateDefaultBuilder(args)
     {
         servicos.AddDbContext<ScreenSoundContext>(options =>
         {
-            options.UseSqlServer("Data Source=DESKTOP-NV3P7TJ;Initial Catalog=ScreenSoundV0;Integrated Security=True;Encrypt=False;")
+            options.UseSqlServer(
+                "Data Source=DESKTOP-NV3P7TJ;Initial Catalog=ScreenSoundV0;Integrated Security=True;Encrypt=False;",
+                sqlOptions => sqlOptions.MigrationsAssembly("ScreenSound.Shared.Dados"))
                 .LogTo(Console.WriteLine, LogLevel.Error);
         });
         servicos.AddScoped<IArtistaRepositorio, ArtistaRepositorio>();

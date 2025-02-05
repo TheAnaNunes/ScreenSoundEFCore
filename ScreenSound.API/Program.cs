@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ScreenSound.API.EndPoints;
 using ScreenSound.Shared.Dados.Repositorios;
+using ScreenSound.Shared.Dados.Repositorios.Interfaces;
 using ScreenSoundSQL.Banco;
 using ScreenSoundSQL.Repositorios;
 using ScreenSoundSQL.Repositorios.Interfaces;
@@ -14,13 +15,16 @@ internal class Program
 
         builder.Services.AddScoped<IArtistaRepositorio, ArtistaRepositorio>();
         builder.Services.AddScoped<IMusicaRepositorio, MusicaRepositorio>();
+        builder.Services.AddScoped<IGeneroRepositorio, GeneroRepositorio>();
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddDbContext<ScreenSoundContext>(options =>
         {
-            options.UseSqlServer("Data Source=DESKTOP-NV3P7TJ;Initial Catalog=ScreenSoundV0;Integrated Security=True;Encrypt=False;");
+            options.UseSqlServer(
+                "Data Source=DESKTOP-NV3P7TJ;Initial Catalog=ScreenSoundV0;Integrated Security=True;Encrypt=False;",
+                sqlOptions => sqlOptions.MigrationsAssembly("ScreenSound.Shared.Dados"));
         });
 
         builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(jsonOptions =>
@@ -33,6 +37,7 @@ internal class Program
 
         app.AdicionarEndPointsArtistas();
         app.AdicionarEndPointsMusicas();
+        app.AdicionarEndPointsGeneros();
 
         app.UseSwagger();
         app.UseSwaggerUI();

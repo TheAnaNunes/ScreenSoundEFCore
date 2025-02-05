@@ -11,8 +11,8 @@ using ScreenSoundSQL.Banco;
 namespace ScreenSoundSQL.Migrations
 {
     [DbContext(typeof(ScreenSoundContext))]
-    [Migration("20250203210820_ConfiguracaoInicialTabelaMusica")]
-    partial class ConfiguracaoInicialTabelaMusica
+    [Migration("20250205171730_AdicionandoGenero")]
+    partial class AdicionandoGenero
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,6 +26,27 @@ namespace ScreenSoundSQL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ScreenSound.Shared.Modelos.Modelos.Genero", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Generos");
+                });
 
             modelBuilder.Entity("ScreenSoundSQL.Modelos.Artista", b =>
                 {
@@ -67,25 +88,22 @@ namespace ScreenSoundSQL.Migrations
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ArtistaId");
 
-                    b.ToTable("Musica", (string)null);
+                    b.ToTable("Musicas");
                 });
 
             modelBuilder.Entity("ScreenSoundSQL.Modelos.Musica", b =>
                 {
-                    b.HasOne("ScreenSoundSQL.Modelos.Artista", "Artista")
+                    b.HasOne("ScreenSoundSQL.Modelos.Artista", null)
                         .WithMany("Musicas")
                         .HasForeignKey("ArtistaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Artista");
                 });
 
             modelBuilder.Entity("ScreenSoundSQL.Modelos.Artista", b =>

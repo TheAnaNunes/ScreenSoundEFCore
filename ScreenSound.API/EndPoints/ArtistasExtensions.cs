@@ -10,7 +10,7 @@ namespace ScreenSound.API.EndPoints;
 public static class ArtistasExtensions
 {
     private static ArtistaResponse EntityToResponse(Artista artista) =>
-        new ArtistaResponse(artista.Id, artista.Nome, artista.Bio, artista.FotoPerfil);
+        new(artista.Id, artista.Nome, artista.Bio!, artista.FotoPerfil);
 
     private static ICollection<ArtistaResponse> EntityToResponseList(IEnumerable<Artista> listaDeArtistas) =>
         listaDeArtistas.Select(a => EntityToResponse(a)).ToList();
@@ -20,7 +20,8 @@ public static class ArtistasExtensions
 
         endpoints.MapGet("", async ([FromServices] IArtistaRepositorio repositorio) =>
         {
-            return Results.Ok(await repositorio.ConsultarAsync());
+            var artistas = EntityToResponseList(await repositorio.ConsultarAsync());
+            return Results.Ok(artistas);
         });
 
         endpoints.MapGet("/{nome}", async (string nome, [FromServices] IArtistaRepositorio repositorio) =>
