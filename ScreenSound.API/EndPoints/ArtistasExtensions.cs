@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ScreenSound.API.Reponses;
+using ScreenSound.API.Requests;
 using ScreenSound.Shared.Modelos.Modelos;
 using ScreenSoundSQL.Modelos;
 using ScreenSoundSQL.Repositorios.Interfaces;
@@ -7,27 +9,36 @@ namespace ScreenSound.API.EndPoints;
 
 public static class ArtistasExtensions
 {
+    private static ArtistaResponse EntityToResponse(Artista artista) =>
+        new ArtistaResponse(artista.Id, artista.Nome, artista.Bio, artista.FotoPerfil);
+
+    private static ICollection<ArtistaResponse> EntityToResponseList(IEnumerable<Artista> listaDeArtistas) =>
+        listaDeArtistas.Select(a => EntityToResponse(a)).ToList();
     public static void AdicionarEndPointsArtistas(this WebApplication app)
     {
-        app.MapGet("/Artistas", async ([FromServices] IArtistaRepositorio repositorio) =>
+        var endpoints = app.MapGroup("/artista").WithTags("Artista");
+
+        endpoints.MapGet("", async ([FromServices] IArtistaRepositorio repositorio) =>
         {
             return Results.Ok(await repositorio.ConsultarAsync());
         });
 
-        app.MapGet("/Artistas/{nome}", async (string nome, [FromServices] IArtistaRepositorio repositorio) =>
+        endpoints.MapGet("/{nome}", async (string nome, [FromServices] IArtistaRepositorio repositorio) =>
         {
             var artistaEscolhido = await repositorio.ConsultarPorNomeAsync(nome);
             if (artistaEscolhido is null) return Results.NotFound(new { Mensagem = "Artista não encontrado" });
             return Results.Ok(artistaEscolhido);
         });
 
-        app.MapPost("/Artistas", async ([FromBody] Artista artista, [FromServices] IArtistaRepositorio repositorio) =>
+        endpoints.MapPost("", async ([FromBody] ArtistaRequest artistaRequest, [FromServices] IArtistaRepositorio repositorio) =>
         {
+            var artista = new Artista(artistaRequest.Nome, artistaRequest.Bio);
+
             await repositorio.AdicionarAsync(artista);
-            return Results.Created($"/Artistas/{artista.Nome}", artista);
+            return Results.Created($"/Artistas/{artistaRequest.Nome}", artista);
         });
 
-        app.MapDelete("/Artistas/{id}", async ([FromServices] IArtistaRepositorio repositorioArtista, [FromServices] IMusicaRepositorio repositorioMusica, int id) =>
+        endpoints.MapDelete("/{id}", async ([FromServices] IArtistaRepositorio repositorioArtista, [FromServices] IMusicaRepositorio repositorioMusica, int id) =>
         {
             Artista? artista = await repositorioArtista.ConsultarPorIdAsync(id);
 
@@ -38,7 +49,7 @@ public static class ArtistasExtensions
         });
 
 
-        app.MapPut("/Artistas/{id}", async ([FromServices] IArtistaRepositorio repositorio, int id, [FromBody] ArtistaAtualizacaoModel artista) =>
+        endpoints.MapPut("/{id}", async ([FromServices] IArtistaRepositorio repositorio, int id, [FromBody] ArtistaAtualizacaoModel artista) =>
         {
             await repositorio.AtualizarPorIdAsync(id, artista);
             return Results.Ok();
