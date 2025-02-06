@@ -21,10 +21,13 @@ public static class GenerosExtensions
         endpoints.MapGet("", async ([FromServices] IGeneroRepositorio repositorio) =>
         {
             var generos = EntityToResponseList(await repositorio.ConsultarAsync());
+
             return Results.Ok(generos);
         });
 
-        endpoints.MapPost("", async ([FromServices] IGeneroRepositorio repositorio, [FromBody] GeneroRequest request) =>
+        endpoints.MapPost("", async (
+            [FromServices] IGeneroRepositorio repositorio, 
+            [FromBody] GeneroRequest request) =>
         {
             var genero = new Genero
             {
@@ -33,19 +36,27 @@ public static class GenerosExtensions
             };
 
             await repositorio.AdicionarAsync(genero);
-            return Results.Ok();
+
+            return Results.Created($"/Generos/{genero.Nome}", genero);
         });
 
-        endpoints.MapPut("/{id}", async ([FromServices] IGeneroRepositorio repositorio, [FromBody] GeneroModel model, int id) =>
+        endpoints.MapPut("/{id}", async (
+            [FromServices] IGeneroRepositorio repositorio, 
+            [FromBody] GeneroModel model, 
+            int id) =>
         {
             await repositorio.AtualizarPorIdAsync(id, model);
-            return Results.Ok();
+
+            return Results.NoContent();
         });
 
-        endpoints.MapDelete("/{id}", async ([FromServices] IGeneroRepositorio repositorio, int id) =>
+        endpoints.MapDelete("/{id}", async (
+            [FromServices] IGeneroRepositorio repositorio, 
+            int id) =>
         {
             await repositorio.DeletarPorIdAsync(id);
-            return Results.Ok();
+
+            return Results.NoContent();
         });
 
     }

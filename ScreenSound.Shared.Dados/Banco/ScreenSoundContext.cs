@@ -11,11 +11,15 @@ public class ScreenSoundContext(DbContextOptions<ScreenSoundContext> options) : 
 
     private const string _connectionString = "Data Source=DESKTOP-NV3P7TJ;Initial Catalog=ScreenSoundV0;Integrated Security=True;Encrypt=False;";
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (optionsBuilder.IsConfigured)
+            return;
+
         optionsBuilder
             .UseSqlServer(_connectionString)
             .UseLazyLoadingProxies();
-
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Musica>()

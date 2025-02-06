@@ -11,7 +11,7 @@ namespace ScreenSound.API.EndPoints;
 public static class MusicasExtensions
 {
     private static MusicaReponse EntityToResponse(Musica musica) =>
-    new(musica.Id, musica.Nome, musica.ArtistaId, musica.Artista!.Nome);
+        new(musica.Id, musica.Nome, musica.ArtistaId, musica.Artista!.Nome);
 
     private static ICollection<MusicaReponse> EntityToResponseList(IEnumerable<Musica> listaDeMusicas) =>
         listaDeMusicas.Select(EntityToResponse).ToList();
@@ -19,16 +19,23 @@ public static class MusicasExtensions
     {
         var endpoints = app.MapGroup("/musica").WithTags("Musica");
 
-        endpoints.MapGet("", async ([FromServices] IMusicaRepositorio repositorio) =>
+        endpoints.MapGet("", async (
+            [FromServices] IMusicaRepositorio repositorio) =>
         {
             var musicas = EntityToResponseList(await repositorio.ConsultarAsync());
+
             return Results.Ok(musicas);
         });
 
-        endpoints.MapGet("/{nome}", async (string nome, [FromServices] IMusicaRepositorio repositorio) =>
+        endpoints.MapGet("/{nome}", async (
+            string nome, 
+            [FromServices] IMusicaRepositorio repositorio) =>
         {
             var musicaEscolhida = await repositorio.ConsultarPorNomeAsync(nome);
-            if (musicaEscolhida is null) return Results.NotFound(new { Mensagem = "Musica não encontrada" });
+
+            if (musicaEscolhida is null) 
+                return Results.NotFound(new { Mensagem = "Musica não encontrada" });
+
             return Results.Ok(musicaEscolhida);
         });
 
@@ -46,28 +53,39 @@ public static class MusicasExtensions
             };
 
             await repositorioMusica.AdicionarAsync(musica);
-            return Results.Ok($"Musica do artista id {musica.ArtistaId} foi adicionada com sucesso!");
+
+            return Results.Created($"/Musicas/{musica.Nome}", musica);
         });
 
 
-        endpoints.MapDelete("/{id}", async ([FromServices] IMusicaRepositorio repositorio, int id) =>
+        endpoints.MapDelete("/{id}", async (
+            [FromServices] IMusicaRepositorio repositorio, 
+            int id) =>
         {
             Musica? musica = await repositorio.ConsultarPorIdAsync(id);
 
-            if (musica is null) return Results.NotFound("Musica não encontrada");
+            if (musica is null) 
+                return Results.NotFound("Musica não encontrada");
 
             await repositorio.DeletarPorIdAsync(id);
-            return Results.Ok();
+
+            return Results.NoContent();
         });
 
-        endpoints.MapPut("/{id}", async ([FromServices] IMusicaRepositorio repositorio, int id, [FromBody] MusicaAtualizacaoModel musica) =>
+        endpoints.MapPut("/{id}", async (
+            [FromServices] IMusicaRepositorio repositorio, 
+            int id, 
+            [FromBody] MusicaAtualizacaoModel musica) =>
         {
             await repositorio.AtualizarPorIdAsync(id, musica);
-            return Results.Ok();
+
+            return Results.NoContent();
         });
     }
 
-    private static async Task<ICollection<Genero>> GeneroRequestConverter(ICollection<GeneroRequest> generos, IGeneroRepositorio repositorio)
+    private static async Task<ICollection<Genero>> GeneroRequestConverter(
+        ICollection<GeneroRequest> generos, 
+        IGeneroRepositorio repositorio)
     {
         var listaDeGeneros = new List<Genero>();
         foreach (var genero in generos)
